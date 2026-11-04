@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <rect x="1" y="1" width="638" height="398" rx="8" fill="#202124" stroke="#606368"/>
+  <path d="M164 1v398" stroke="#606368"/>
+  <g fill="#9aa0a6" font-family="sans-serif" font-size="12">
+    <text x="16" y="29">Agents</text><text x="16" y="62">workstation / project</text>
+    <text x="25" y="91">agent</text><text x="39" y="117">child</text>
+    <text x="53" y="143">grandchild</text><text x="25" y="177">▸ shell project</text>
+  </g>
+  <g fill="#bdc1c6" font-family="monospace" font-size="13">
+    <text x="186" y="31">$ focused agent</text><text x="186" y="56">▌</text>
+  </g>
+</svg>

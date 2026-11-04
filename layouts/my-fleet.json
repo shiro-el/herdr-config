@@ -1,0 +1,21 @@
+{
+  "id": "root",
+  "type": "row",
+  "resizable": true,
+  "preview": "layouts/my-fleet.svg",
+  "children": [
+    {
+      "id": "fleet",
+      "type": "block",
+      "size": { "px": 300 },
+      "min": 44,
+      "max": 480,
+      "content": { "mod": "fleet" }
+    },
+    {
+      "id": "main",
+      "type": "block",
+      "content": { "agent": "focused" }
+    }
+  ]
+}
