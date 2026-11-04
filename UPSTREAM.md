@@ -24,10 +24,14 @@ and `herdr-app check` still need client validation.
 
 `src/window.rs::agent_order` limits navigation to `Model::all_addresses`
 (pane terminals), and `agent.next/prev` uses `root_agent` for its cursor.
-`setAgentOrder` cannot change that host behavior. Fleet supplies full depth
-first order, including folded live agents, but cannot provide complete
-child-by-child navigation with the requested built-in key actions on this
-upstream revision. No core/app files are modified by this repository.
+`setAgentOrder` cannot change that host behavior. Fleet still supplies full
+depth first order, including folded live agents. The personal J/K bindings
+use `fleet.next/prev` instead: the mod walks that order, skips folded rows,
+finished terminals and shell windows, and calls `agent.focus` directly on
+the next live terminal, updating tree selection too. It wraps in either
+direction, starting from `focused().agent` or the selected row when none is
+shown. Current live facts are checked again so stale history cannot focus
+an exited or disconnected terminal. No core/app files are modified.
 
 `terminals()` is live-only on this revision. Fleet supplements it with
 `exec("hc", ["ls", "--all", "--json"], {on: machine})` every 30 seconds per

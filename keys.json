@@ -48,7 +48,7 @@
     "ctrl-shift-b": "layout.toggle:sidebar",
     "ctrl-shift-n": "space.new",
     "ctrl-shift-t": "tab.new",
-    "ctrl-shift-k": "agent.prev",
+    "ctrl-shift-k": "fleet.prev",
     "ctrl-shift-p": "app.palette",
     "ctrl-,": "app.settings",
     "ctrl-shift-o": "pane.split:right",
@@ -59,7 +59,7 @@
     "ctrl-shift-l": "layout.switch",
     "f2": "tab.rename",
     "shift-f2": "space.rename",
-    "ctrl-shift-j": "agent.next",
+    "ctrl-shift-j": "fleet.next",
     "ctrl-shift-enter": "fleet.new-shell",
     "ctrl-shift-space": "fleet.toggle-shells"
   },

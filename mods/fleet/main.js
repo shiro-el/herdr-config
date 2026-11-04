@@ -68,6 +68,7 @@ export default class Fleet extends View {
         try {
           if (command === "new-shell") await this.newShell();
           else if (command === "toggle-shells") toggleShells();
+          else if (command === "next" || command === "prev") this.navigate(command === "next" ? 1 : -1, cx);
         } catch (error) {
           notify({ title: "Fleet", body: String(error), level: "error" });
         }
@@ -147,6 +148,38 @@ export default class Fleet extends View {
     cx.notify();
   }
 
+  treeSnapshot() {
+    const listed = agents();
+    const all = new Map([...this.history.values()].flat().map(k => [k.address, { ...this.known.get(k.address), ...k }]));
+    for (const k of terminals()) all.set(k.address, { ...all.get(k.address), ...k, cwd: k.foreground?.cwd || k.cwd });
+    for (const a of listed) all.set(a.address, { ...all.get(a.address), ...a });
+    this.known = all;
+    const shellList = shellState().items;
+    const groups = buildForest(spaces(), listed, [...all.values()], panes(), shellList);
+    // Include folded agents too: Herdr appends omitted agents to its navigation list.
+    const list = groups.flatMap(g => flattenTree(g.roots, new Set(all.keys())).map(r => r.terminal));
+    return { groups, list };
+  }
+
+  navigate(direction, cx) {
+    const { groups, list } = this.treeSnapshot();
+    const visible = new Set(groups.flatMap(g => this.folded.has(g.space.id) ? []
+      : flattenTree(g.roots, this.expandedDone).map(row => row.terminal.address)));
+    // History can lag exits/disconnections: only the current live snapshot may be focused.
+    const live = new Set(terminals().filter(t => t.state === "live").map(t => t.address));
+    const current = focused()?.agent ?? this.selected?.address;
+    let index = list.findIndex(t => t.address === current);
+    if (index < 0) index = direction > 0 ? -1 : 0;
+    // Walk the full order so a cursor inside a newly folded branch keeps its place.
+    for (let step = 1; step <= list.length; step++) {
+      const terminal = list[(index + direction * step + list.length) % list.length];
+      if (terminal.state === "live" && visible.has(terminal.address) && live.has(terminal.address)) {
+        this.selectTerminal(terminal, cx);
+        return;
+      }
+    }
+  }
+
   since(a) { return this.changed[a.address]?.at ?? 0; }
   track(list, now) {
     let dirty = false;
@@ -218,15 +251,7 @@ export default class Fleet extends View {
   render(cx) {
     const t = theme();
     const collapsed = narrow();
-    const listed = agents();
-    const all = new Map([...this.history.values()].flat().map(k => [k.address, { ...this.known.get(k.address), ...k }]));
-    for (const k of terminals()) all.set(k.address, { ...all.get(k.address), ...k, cwd: k.foreground?.cwd || k.cwd });
-    for (const a of listed) all.set(a.address, { ...all.get(a.address), ...a });
-    this.known = all;
-    const shellList = shellState().items;
-    const groups = buildForest(spaces(), listed, [...all.values()], panes(), shellList);
-    // Include folded agents too: Herdr appends omitted agents to its navigation list.
-    const list = groups.flatMap(g => flattenTree(g.roots, new Set(all.keys())).map(r => r.terminal));
+    const { groups, list } = this.treeSnapshot();
     setAgentOrder(list.filter(a => a.state === "live" && a.status).map(a => a.address));
     const shown = focused()?.agent;
     if (shown && (shown !== this.lastShown || !this.selected)) {
