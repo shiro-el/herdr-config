@@ -11,11 +11,11 @@
 
 `keys.json`은 기본 공통 키를 유지하고 위 키만 바꿉니다. 기본 Ctrl+Shift+K(space picker)는 이전 에이전트로 바뀝니다. macOS용 기본 파일의 Cmd 단축키·Option 편집키·Ctrl+숫자 space 선택은 합치지 않아, 두 OS에서 같은 Ctrl 체계를 사용합니다.
 
-macOS·Windows **각 클라이언트**에 Herdr 앱과 Git을 설치하세요. 설정 경로는 macOS `~/.config/herdr-app`, Windows `$HOME\.config\herdr-app`입니다(AppData 아님). `HERDR_APP_HOME` 또는 `XDG_CONFIG_HOME`을 설정했다면 그 경로를 쓰세요. 앱의 Machines 설정에서 이 워크스테이션 SSH 연결도 추가합니다.
+macOS·Windows·Linux **각 클라이언트**에 Herdr 앱과 Git을 설치하세요. 설정 경로는 macOS·Linux `~/.config/herdr-app`, Windows `$HOME\.config\herdr-app`입니다(AppData 아님). `HERDR_APP_HOME` 또는 `XDG_CONFIG_HOME`을 설정했다면 그 경로를 쓰세요. 앱의 Machines 설정에서 이 워크스테이션 SSH 연결도 추가합니다.
 
 설치와 업데이트는 같은 한 줄입니다. 처음이면 clone하고, 이미 있으면 pull한 뒤 복사·검사·레이아웃 전환까지 합니다. 기존 `keys.json`은 처음 한 번만 `keys.json.before-fleet`으로 백업합니다. private repo라 클라이언트에 GitHub 인증(`gh auth login` 등)이 되어 있어야 합니다.
 
-macOS 터미널:
+macOS·Linux 터미널:
 
 ```sh
 git clone https://github.com/shiro-el/herdr-config.git ~/herdr-config 2>/dev/null; git -C ~/herdr-config pull --ff-only && sh ~/herdr-config/install.sh

@@ -17,7 +17,7 @@ function closeShell(address, overlay) {
 
 export default class FleetShellBar extends View {
   render() {
-    const { address, overlay } = props();
+    const { address, overlay } = props() ?? {};
     registerShell(address, overlay);
     const name = shellState().items.find(s => s.address === address)?.name ?? address;
     const t = theme();
