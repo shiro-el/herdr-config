@@ -42,9 +42,10 @@ export function buildForest(spaces, agents, terminals, panes = [], shells = []) 
     else group.roots.push(t);
   }
   // Keep non-agent intermediates only when they connect a real descendant.
+  // A Claude session that moved to a background job stops reporting status but still holds the foreground.
   const prune = (t) => {
     t.children = t.children.filter(prune);
-    return Boolean(t.status || t.program?.agent || t.parent || t.children.length);
+    return Boolean(t.status || t.program?.agent || t.foreground?.name === "claude" || t.parent || t.children.length);
   };
   for (const g of groups) g.roots = g.roots.filter(prune);
   return groups;

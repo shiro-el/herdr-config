@@ -5,6 +5,14 @@ const spaces = [{ id: "box/s1", tabs: [{ id: "box/tab1" }] }, { id: "other/s1", 
 const root = { address: "box/t1", space: "box/s1", status: "working" };
 const term = (id, parent, status = "working", state = "live") => ({ address: `box/${id}`, parent, status, state });
 
+test("a Claude session that stopped reporting status stays listed, an idle shell does not", () => {
+  const groups = buildForest(spaces, [], [
+    { address: "box/t1", space: "box/s1", state: "live", status: null, foreground: { name: "claude" } },
+    { address: "box/t2", space: "box/s1", state: "live", status: null, foreground: { name: "zsh" } },
+  ]);
+  assert.deepEqual(flattenTree(groups[0].roots).map(r => r.terminal.address), ["box/t1"]);
+});
+
 test("remote bare parent ids and out-of-order grandchildren stay in their machine's space", () => {
   const groups = buildForest(spaces, [root, { ...root, address: "other/t1", space: "other/s1" }], [
     term("t3", "t2"), term("t2", "t1"), term("t1"),
