@@ -13,7 +13,7 @@
 
 macOS·Windows·Linux **각 클라이언트**에 Herdr 앱과 Git을 설치하세요. 설정 경로는 macOS·Linux `~/.config/herdr-app`, Windows `$HOME\.config\herdr-app`입니다(AppData 아님). `HERDR_APP_HOME` 또는 `XDG_CONFIG_HOME`을 설정했다면 그 경로를 쓰세요. 앱의 Machines 설정에서 이 워크스테이션 SSH 연결도 추가합니다.
 
-설치와 업데이트는 같은 한 줄입니다. 처음이면 clone하고, 이미 있으면 pull한 뒤 복사·검사·레이아웃 전환까지 합니다. 기존 `keys.json`은 처음 한 번만 `keys.json.before-fleet`으로 백업합니다. private repo라 클라이언트에 GitHub 인증(`gh auth login` 등)이 되어 있어야 합니다.
+설치와 업데이트는 같은 한 줄입니다. 처음이면 clone하고, 이미 있으면 pull합니다. 다시 실행하면 `fleet`, `fleet-shell-bar` 모드만 새로 복사합니다. 이미 있는 `keys.json`과 `my-fleet` 레이아웃은 그대로 두고, 레이아웃도 전환하지 않습니다. 기존 `keys.json`이 있으면 이 저장소의 키는 적용되지 않으니 필요한 키만 직접 합치세요. private repo라 클라이언트에 GitHub 인증(`gh auth login` 등)이 되어 있어야 합니다.
 
 macOS·Linux 터미널:
 
@@ -27,6 +27,6 @@ Windows PowerShell:
 git clone https://github.com/shiro-el/herdr-config.git $HOME\herdr-config 2>$null; git -C $HOME\herdr-config pull --ff-only; powershell -ExecutionPolicy Bypass -File $HOME\herdr-config\install.ps1
 ```
 
-앱이 켜져 있으면 바로 `my-fleet`으로 바뀝니다. `herdr-app` CLI가 PATH에 없거나 앱이 꺼져 있으면 복사만 하므로, 앱에서 `ctrl-shift-l`로 `my-fleet`을 고르세요. 되돌리려면 `keys.json.before-fleet`을 `keys.json`으로 되돌리고 `ctrl-shift-l`로 기본 레이아웃을 고릅니다. 개인 설정과 앱 상태 파일은 복사하지 않습니다.
+처음 설치할 때 앱이 켜져 있으면 바로 `my-fleet`으로 바뀝니다. `herdr-app` CLI가 PATH에 없거나 앱이 꺼져 있으면 복사만 하므로, 앱에서 `ctrl-shift-l`로 `my-fleet`을 고르세요. 되돌리려면 `ctrl-shift-l`로 다른 레이아웃을 고릅니다. 개인 설정과 앱 상태 파일은 복사하지 않습니다.
 
 이 Linux 호스트에는 앱이 없어 네이티브 검사·화면 검증은 하지 못했습니다. 종료된 자식은 core 이력을 30초마다 읽습니다. `fleet.next/prev`가 현재 표시된 에이전트(없으면 선택 행)에서 같은 깊이 우선 순서로 이동하고, 접힌 행·종료된 터미널·셸 창은 건너뜁니다. 이동하면 가운데 표시와 트리 선택도 함께 바뀝니다. 내장 순회용 `setAgentOrder`도 계속 전달합니다. 직접 클릭은 살아 있는 자식을 가운데에 표시하고, 종료된 항목은 폴더 선택용으로 남습니다. 두 클라이언트에서 키 4개, 자식 클릭·접기, 원격 셸의 경로, 창 닫기·복원·앱 재시작을 확인하세요.
